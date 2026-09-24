@@ -41,3 +41,33 @@ class ValidacionSimple(EstrategiaParticionado):
             
             # Guardamos esta partición
             self.particiones.append({"train": indices_train, "test": indices_test})
+
+class ValidacionCruzada(EstrategiaParticionado):
+    """
+    Implementa la estrategia de validación cruzada (K-Fold).
+    """
+    def __init__(self, numero_particiones=5):
+        super().__init__()
+        self.numero_particiones = numero_particiones
+
+    def creaParticiones(self, numero_filas):
+        # Limpiamos particiones previas
+        self.particiones = []
+        
+        # 1. Barajamos los índices para evitar sesgos al igual que en hold-out
+        indices_aleatorios = np.random.permutation(numero_filas)
+        
+        # 2. Dividimos el array de índices en K grupos (folds) lo más iguales posible
+        folds = np.array_split(indices_aleatorios, self.numero_particiones)
+        
+        # 3. Construimos las K particiones
+        for i in range(self.numero_particiones):
+            # El fold actual es para test (lo convertimos a lista)
+            indices_test = folds[i].tolist()
+            
+            # Los demás folds son para train (concatenamos y convertimos a lista)
+            folds_train = [folds[j] for j in range(self.numero_particiones) if j != i]
+            indices_train = np.concatenate(folds_train).tolist()
+            
+            # Guardamos la partición
+            self.particiones.append({"train": indices_train, "test": indices_test})
