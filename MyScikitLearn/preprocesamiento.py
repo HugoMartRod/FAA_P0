@@ -21,7 +21,7 @@ class Dataset:
             else:
                 # Si es nominal, se ordenan las claves lexicográficamente y se asigna un entero
                 valores_unicos = sorted(self.datos_originales[columna].dropna().unique())
-                self.diccionarios[columna] = {valor: indice for indice, valor en enumerate(valores_unicos)}
+                self.diccionarios[columna] = {valor: indice for indice, valor in enumerate(valores_unicos)}
 
     def _transformar_datos(self):
         # Crea la versión numérica usando los diccionarios generados
