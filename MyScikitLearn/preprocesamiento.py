@@ -3,7 +3,7 @@ import numpy as np
 
 class Dataset:
     def __init__(self, filepath):
-        # Lee el fichero original
+        # Lee 2el fichero original
         self.datos_originales = pd.read_csv(filepath)
         
         self.diccionarios = {}
